@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "skills": {
+    "video-editing": {
+      "source": "affaan-m/ecc",
+      "commit": "3f14a103a8694e51c1df9a806217a6d0b5f7a6f7",
+      "sourceType": "github",
+      "skillPath": "skills/video-editing/SKILL.md",
+      "computedHash": "b1a66c7e9337e7030cfef7c5a8b2a519123e63c8fef710105118eab89641e505"
+    }
+  }
+}
