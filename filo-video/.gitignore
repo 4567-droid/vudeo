@@ -1,0 +1,6 @@
+node_modules/
+out/
+*.mp4
+# Material de Bosco (foto y capturas del PDF): se regenera con `npm run assets -- <pdf>`.
+# No se sube porque el repositorio es público.
+public/assets/bosco/

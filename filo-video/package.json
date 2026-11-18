@@ -1,0 +1,28 @@
+{
+  "name": "filo-video",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Reel vertical 9:16 de Filo (sistema de turnos online para barberías), armado con Remotion.",
+  "scripts": {
+    "assets": "bash scripts/prepare-assets.sh",
+    "music": "bash scripts/make-music.sh",
+    "studio": "remotion studio src/index.ts",
+    "typecheck": "tsc -p .",
+    "stills": "node scripts/stills.mjs",
+    "render": "bash scripts/render.sh",
+    "check": "python3 -I scripts/check_contrast.py /output/filo-reel.mp4"
+  },
+  "dependencies": {
+    "@remotion/cli": "4.0.540",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "remotion": "4.0.540"
+  },
+  "devDependencies": {
+    "@remotion/bundler": "4.0.540",
+    "@remotion/renderer": "4.0.540",
+    "@types/react": "18.3.12",
+    "@types/react-dom": "18.3.1",
+    "typescript": "5.6.3"
+  }
+}
