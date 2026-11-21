@@ -1,54 +1,37 @@
-# Remotion video
+# Cronos — comercial vertical para Instagram (Remotion)
 
-<p align="center">
-  <a href="https://github.com/remotion-dev/logo">
-    <picture>
-      <source media="(prefers-color-scheme: dark)" srcset="https://github.com/remotion-dev/logo/raw/main/animated-logo-banner-dark.apng">
-      <img alt="Animated Remotion Logo" src="https://github.com/remotion-dev/logo/raw/main/animated-logo-banner-light.gif">
-    </picture>
-  </a>
-</p>
+Comercial de Fiat Cronos 0km con plan de ahorro para Scuderia Fiat.
 
-Welcome to your Remotion project!
+| Composición   | Duración | Uso                                          |
+| ------------- | -------- | -------------------------------------------- |
+| `CronosReel`  | 40 s     | Reel (gancho, auto, solución, plan, urgencia, WhatsApp) |
+| `CronosStory` | 15 s     | Stories (gancho, plan, WhatsApp)             |
 
-## Commands
+Las dos son 1080x1920, 30 fps. Copy del post: [COPY-INSTAGRAM.md](COPY-INSTAGRAM.md).
 
-**Install Dependencies**
+## Ver y editar
 
-```console
-npm i --loglevel=error
+```bash
+npm install
+npm run dev        # abre Remotion Studio
 ```
 
-**Start Preview**
+- Tiempos y textos de cada escena: `src/CronosReel.tsx` y `src/CronosStory.tsx`.
+- Escenas: `src/scenes/` · tomas de foto, destellos, legal y animaciones: `src/components/`.
+- Colores, tipografías y zonas seguras de Instagram: `src/theme.ts`.
+- Fotos: `public/fotos/` (se usan en orden alfabético de archivo).
 
-```console
-npm run dev
+## Música
+
+`scripts/make_music.py` sintetiza la pista (sin samples ni copyright) a 120 BPM, así cada
+corte cae en un beat (15 fotogramas). Trae los golpes sincronizados con los textos y un drop
+con impacto cuando aparece el anticipo. Si movés tiempos en las composiciones, actualizá
+las listas de golpes del script.
+
+## Exportar
+
+```bash
+bash scripts/render.sh   # -> out/cronos-reel-40s.mp4 y out/cronos-story-15s.mp4 (H.264)
 ```
 
-**Render video**
-
-```console
-npx remotion render
-```
-
-**Upgrade Remotion**
-
-```console
-npx remotion upgrade
-```
-
-## Docs
-
-Get started with Remotion by reading the [fundamentals page](https://www.remotion.dev/docs/the-fundamentals).
-
-## Help
-
-We provide help on our [Discord server](https://discord.gg/6VzzNDwUwV).
-
-## Issues
-
-Found an issue with Remotion? [File an issue here](https://github.com/remotion-dev/remotion/issues/new).
-
-## License
-
-Note that for some entities a company license is needed. [Read the terms here](https://github.com/remotion-dev/remotion/blob/main/LICENSE.md).
+Regenera la música (normalizada a -14 LUFS) y renderiza las dos versiones.
