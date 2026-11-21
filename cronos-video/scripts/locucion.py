@@ -30,7 +30,7 @@ VOICE = "es-AR-TomasNeural"
 # (gancho, auto, solución, plan, urgencia, WhatsApp).
 GUION = [
     (0, 3, "¿Querés tu Fiat Cronos cero kilómetro?"),
-    (3, 12, "El Cronos negro que estabas buscando, listo para vos."),
+    (3, 12, "El Cronos que estabas buscando, listo para vos."),
     (12, 22, "Y lo mejor: no necesitás tener todo el dinero junto. "
              "Con el plan de ahorro de Scuderia Fiat, llegás a tu cero kilómetro."),
     (22, 32, "Anticipo de cuatro millones y cuotas desde cuatrocientos cincuenta mil pesos. "
