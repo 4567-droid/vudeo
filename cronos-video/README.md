@@ -35,3 +35,15 @@ bash scripts/render.sh   # -> out/cronos-reel-40s.mp4 y out/cronos-story-15s.mp4
 ```
 
 Regenera la música (normalizada a -14 LUFS) y renderiza las dos versiones.
+
+## Locución (voz es-AR-TomasNeural)
+
+```bash
+pip install edge-tts
+python3 scripts/locucion.py video.mp4   # -> video_con_voz.mp4 y locucion.mp3 al lado del video
+```
+
+Una frase por escena (guion y tramos en `GUION`, dentro del script). Si una frase no entra en
+su tramo, la acelera hasta ×1,25 como máximo; si aun así no entra, la adelanta al silencio
+previo y lo avisa. La música baja unos 10 dB solo mientras habla la voz. La imagen se copia
+sin recodificar (idéntica al original). edge-tts necesita internet (servicio de Microsoft).
