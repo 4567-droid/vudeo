@@ -21,6 +21,12 @@ mkdir -p out
 for comp in "CronosReel:out/cronos-reel-40s.mp4" "CronosStory:out/cronos-story-15s.mp4"; do
   id="${comp%%:*}"; file="${comp#*:}"
   npx remotion render "$id" "$file" --codec=h264 --crf=18 --pixel-format=yuv420p \
-    --audio-codec=aac --audio-bitrate=192k "${EXTRA[@]}" "$@"
+    --audio-codec=aac --audio-bitrate=192k ${EXTRA[@]+"${EXTRA[@]}"} "$@"
+  # Rango de color estándar (BT.709 limitado) + faststart: lo que mejor digiere Instagram.
+  ffmpeg -y -hide_banner -loglevel error -i "$file" \
+    -vf "scale=in_range=pc:out_range=tv,format=yuv420p" -c:v libx264 -preset slow -crf 17 \
+    -profile:v high -level 4.1 -color_range tv -colorspace bt709 -color_primaries bt709 \
+    -color_trc bt709 -c:a copy -movflags +faststart "${file%.mp4}.tmp.mp4"
+  mv "${file%.mp4}.tmp.mp4" "$file"
 done
 ls -lh out/*.mp4
