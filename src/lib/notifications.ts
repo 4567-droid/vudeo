@@ -51,7 +51,7 @@ export async function notify(
   }
 }
 
-export type ReminderId = "wake" | "study" | "training" | "sleep";
+export type ReminderId = "wake" | "followups" | "study" | "training" | "sleep";
 
 export interface Reminder {
   id: ReminderId;
@@ -60,16 +60,24 @@ export interface Reminder {
 
 export const REMINDERS: Reminder[] = [
   { id: "wake", time: "06:30" },
+  { id: "followups", time: "08:00" },
   { id: "study", time: "15:30" },
   { id: "training", time: "17:30" },
   { id: "sleep", time: "22:30" },
 ];
 
+export interface ReminderContext {
+  dayNumber: number;
+  /** Seguimientos de ventas pendientes para hoy. */
+  followUps: number;
+}
+
+/** Texto del recordatorio. null = ese día no se avisa. */
 export function reminderContent(
   id: ReminderId,
   date: DateKey,
-  dayNumber: number,
-): { title: string; body: string } {
+  { dayNumber, followUps }: ReminderContext,
+): { title: string; body: string } | null {
   switch (id) {
     case "wake":
       if (dayNumber === 11 || dayNumber === 12) {
@@ -86,6 +94,12 @@ export function reminderContent(
         };
       }
       return { title: "Son las 6:30", body: "Levantate y movete 5 minutos." };
+    case "followups":
+      if (followUps === 0) return null;
+      return {
+        title: "Seguimientos de hoy",
+        body: `Tenés ${followUps} ${followUps === 1 ? "seguimiento" : "seguimientos"} de ventas para hoy. Empezá por el más difícil.`,
+      };
     case "study":
       return { title: "Estudio", body: "30 minutos de estudio. Arrancá ahora." };
     case "training": {
@@ -140,9 +154,9 @@ function minutesLate(time: string): number {
 
 /**
  * Programa los recordatorios del día. Devuelve una función para cancelarlos.
- * `getDayNumber` se consulta al momento de disparar, para que el texto use la racha actual.
+ * `getContext` se consulta al momento de disparar, para que el texto use los datos actuales.
  */
-export function scheduleReminders(getDayNumber: () => number): () => void {
+export function scheduleReminders(getContext: () => ReminderContext): () => void {
   let timers: ReturnType<typeof setTimeout>[] = [];
 
   const fire = (r: Reminder) => {
@@ -151,8 +165,8 @@ export function scheduleReminders(getDayNumber: () => number): () => void {
     const late = minutesLate(r.time);
     if (late >= 0 && late <= MAX_LATE_MINUTES && !alreadyNotified(key)) {
       markNotified(key, today);
-      const { title, body } = reminderContent(r.id, today, getDayNumber());
-      void notify(title, body, `rumbo-${r.id}`);
+      const content = reminderContent(r.id, today, getContext());
+      if (content) void notify(content.title, content.body, `rumbo-${r.id}`);
     }
   };
 

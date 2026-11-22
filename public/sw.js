@@ -1,7 +1,7 @@
 /* Service worker de Rumbo: funciona sin conexión y muestra las notificaciones. */
 
-const VERSION = "rumbo-v1";
-const PAGES = ["/", "/racha", "/plan"];
+const VERSION = "rumbo-v2";
+const PAGES = ["/", "/racha", "/plan", "/finanzas", "/ventas", "/asistente", "/biblioteca"];
 const ASSETS = [
   "/manifest.webmanifest",
   "/icons/icon-192.png",
@@ -111,6 +111,8 @@ if (CACHE_ENABLED) {
     if (request.method !== "GET") return;
     const url = new URL(request.url);
     if (url.origin !== self.location.origin) return;
+    // El chat siempre va a la red: no se guarda.
+    if (url.pathname.startsWith("/api/")) return;
 
     // Páginas: la versión nueva si hay red; si no, la guardada.
     if (request.mode === "navigate") {

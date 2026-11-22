@@ -3,7 +3,11 @@
 import { useState, useSyncExternalStore } from "react";
 import { useRumbo } from "@/hooks/useRumbo";
 import { isValidKey } from "@/lib/date";
+import { useAssistant } from "@/lib/assistant";
 import { downloadJson } from "@/lib/export";
+import { useFinance } from "@/lib/finance";
+import { useLibrary } from "@/lib/library";
+import { useSales } from "@/lib/sales";
 import {
   notify,
   permissionState,
@@ -72,9 +76,11 @@ function RemindersCard() {
     status =
       "Las notificaciones están bloqueadas. Habilitalas para este sitio en los ajustes del navegador.";
   } else if (enabled) {
-    status = "Activados: 6:30, 15:30 (estudio), 17:30 (gimnasio) y 22:30 (dormir).";
+    status =
+      "Activados: 6:30, 8:00 (seguimientos de ventas, si hay), 15:30 (estudio), 17:30 (gimnasio) y 22:30 (dormir).";
   } else {
-    status = "Te avisa a las 6:30, 15:30 (estudio), 17:30 (gimnasio) y 22:30 (dormir).";
+    status =
+      "Te avisa a las 6:30, 8:00 (seguimientos de ventas, si hay), 15:30 (estudio), 17:30 (gimnasio) y 22:30 (dormir).";
   }
 
   return (
@@ -161,6 +167,10 @@ function DatesCard() {
 
 function ExportCard() {
   const { data } = useRumbo();
+  const finance = useFinance().data;
+  const sales = useSales().data;
+  const library = useLibrary().data;
+  const assistant = useAssistant().data;
   return (
     <Card>
       <h3 className="text-lg font-semibold">Tus datos</h3>
@@ -171,7 +181,7 @@ function ExportCard() {
         variant="secondary"
         className="mt-4 w-full"
         disabled={!data}
-        onClick={() => data && downloadJson(data)}
+        onClick={() => data && downloadJson({ core: data, finance, sales, library, assistant })}
       >
         Exportar a JSON
       </Button>

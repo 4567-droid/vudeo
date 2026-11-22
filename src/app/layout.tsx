@@ -3,7 +3,7 @@ import type { ReactNode } from "react";
 import { Inter } from "next/font/google";
 import { AppServices } from "@/components/AppServices";
 import { BottomNav } from "@/components/BottomNav";
-import { RumboProvider } from "@/hooks/useRumbo";
+import { Providers } from "@/components/Providers";
 import "./globals.css";
 
 const inter = Inter({
@@ -14,7 +14,7 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: "Rumbo",
-  description: "Tu plan de 90 días y tu racha sin consumir.",
+  description: "Tu plan de 90 días: racha sin consumir, finanzas, ventas y un coach.",
   applicationName: "Rumbo",
   appleWebApp: {
     capable: true,
@@ -35,7 +35,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="es-AR" className={`${inter.variable} antialiased`}>
       <body className="min-h-dvh">
-        <RumboProvider>
+        <Providers>
           <AppServices />
           <main
             className="mx-auto w-full max-w-[430px] px-4"
@@ -47,7 +47,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
             {children}
           </main>
           <BottomNav />
-        </RumboProvider>
+        </Providers>
       </body>
     </html>
   );

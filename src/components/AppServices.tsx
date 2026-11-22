@@ -2,11 +2,14 @@
 
 import { useEffect, useRef } from "react";
 import { useRumbo } from "@/hooks/useRumbo";
-import { permissionState, scheduleReminders } from "@/lib/notifications";
+import { permissionState, scheduleReminders, type ReminderContext } from "@/lib/notifications";
+import { useSales } from "@/lib/sales";
+import { dueFollowUps } from "@/lib/sales/calc";
 
 /** Registra el service worker y programa los recordatorios. No dibuja nada. */
 export function AppServices() {
-  const { ready, data, streak } = useRumbo();
+  const { ready, data, streak, today } = useRumbo();
+  const sales = useSales().data;
 
   useEffect(() => {
     if (!("serviceWorker" in navigator)) return;
@@ -28,15 +31,18 @@ export function AppServices() {
       });
   }, []);
 
-  const dayNumber = useRef(0);
+  const context = useRef<ReminderContext>({ dayNumber: 0, followUps: 0 });
   useEffect(() => {
-    dayNumber.current = streak?.dayNumber ?? 0;
-  }, [streak?.dayNumber]);
+    context.current = {
+      dayNumber: streak?.dayNumber ?? 0,
+      followUps: sales && today ? dueFollowUps(sales, today).length : 0,
+    };
+  }, [streak?.dayNumber, sales, today]);
 
   const enabled = ready && Boolean(data?.settings.notificationsEnabled);
   useEffect(() => {
     if (!enabled || permissionState() !== "granted") return;
-    return scheduleReminders(() => dayNumber.current);
+    return scheduleReminders(() => context.current);
   }, [enabled]);
 
   return null;
